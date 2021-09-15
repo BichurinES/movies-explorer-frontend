@@ -1,14 +1,18 @@
 import React from 'react';
-import MainHeader from '../MainHeader/MainHeader';
-import LoggedHeader from '../LoggedHeader/LoggedHeader';
-
+import Promo from '../Promo/Promo';
+import AboutProject from '../AboutProject/AboutProject';
+import Techs from '../Techs/Techs';
+import AboutMe from '../AboutMe/AboutMe';
+import Portfolio from '../Portfolio/Portfolio';
 
 export default function Main() {
   return (
-    <>
-      <MainHeader />
-      <LoggedHeader />
-      <main></main>
-    </>
+    <main>
+      <Promo />
+      <AboutProject />
+      <Techs />
+      <AboutMe />
+      <Portfolio />
+    </main>
   )
 }

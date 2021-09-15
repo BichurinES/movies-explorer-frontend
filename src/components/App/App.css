@@ -8,6 +8,7 @@
 }
 
 .page__button {
+  cursor: pointer;
   transition: opacity .5s ease;
 }
 
