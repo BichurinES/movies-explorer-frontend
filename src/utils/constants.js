@@ -8,7 +8,7 @@ export const MOVIES_SECTION_SETTINGS = {
   },
   tablet: {
     title: 'tablet',
-    width: 480,
+    width: 768,
     cardsInitialNumber: 8,
     addCardsNumber: 2,
     maxColumns: 2,

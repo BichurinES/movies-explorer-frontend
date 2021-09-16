@@ -53,6 +53,7 @@ export const cards = [
     }
   },
   {
+    "isSaved": true,
     "id": 2,
     "nameRU": "All Tomorrow's Parties",
     "nameEN": "All Tomorrow's Parties",
@@ -245,6 +246,7 @@ export const cards = [
     }
   },
   {
+    "isSaved": true,
     "id": 6,
     "nameRU": "Фавела на взрыве",
     "nameEN": "Favela on Blast",

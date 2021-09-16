@@ -15,7 +15,7 @@
   padding: 0;
   padding-bottom: 10px;
   margin: 0;
-  grid-template-columns: repeat(1, 1fr);
+  grid-template-columns: repeat(1, 300px);
   row-gap: 36px;
   column-gap: 30px;
   justify-content: center;
@@ -41,12 +41,6 @@
   display: none;
 }
 
-@media screen and (min-width: 480px) {
-  .movies-card__list {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
 @media screen and (min-width: 768px) {
   .movies-cards {
     padding: 70px 30px 80px;
@@ -57,6 +51,7 @@
   }
 
   .movies-card__list {
+    grid-template-columns: repeat(2, 339px);
     row-gap: 45px;
   }
 
@@ -75,7 +70,7 @@
   }
 
   .movies-card__list {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 360px);
     row-gap: 57px;
     padding-bottom: 26px;
   }

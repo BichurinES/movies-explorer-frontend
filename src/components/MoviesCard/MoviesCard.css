@@ -87,7 +87,7 @@
   display: none;
 }
 
-.movies-card__delete-button_type_movies {
+.movies-card__delete-button_type_default-movies {
   background: url('../../images/movies-card__delete-button_type_movies.svg') no-repeat center center;
   background-color: #ee3465;
 }

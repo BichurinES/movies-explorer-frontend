@@ -74,6 +74,10 @@
   outline: none;
 }
 
+.profile__field:focus::placeholder {
+  color: #fff;
+}
+
 .profile__error {
   display: none;
   padding: 10px 0;
