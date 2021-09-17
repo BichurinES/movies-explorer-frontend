@@ -1,7 +1,9 @@
-import React from 'react';
+import { useState } from 'react';
 import { Switch, Route } from 'react-router-dom'; 
+import { useHistory } from 'react-router-dom';
 import './App.css';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
+import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import MainHeader from '../MainHeader/MainHeader';
 import LoggedHeader from '../LoggedHeader/LoggedHeader';
 import Footer from '../Footer/Footer';
@@ -15,8 +17,42 @@ import NotFound from '../NotFound/NotFound';
 import InfoTooltip from '../InfoTooltip/InfoTooltip';
 
 function App() {
-  const [currentUser, setCurrentUser] = React.useState({});
-  const [infoTooltipData, setInfoTooltipData] = React.useState({});
+  const history = useHistory();
+  const [currentUser, setCurrentUser] = useState({});
+  const [isLogged, setIsLogged] = useState(false);
+  const [isPopupOpened, setIsPopupOpened] = useState(false);
+  const [infoTooltipData, setInfoTooltipData] = useState({});
+  
+  function openPopup(data) {
+    setInfoTooltipData(data);
+    setIsPopupOpened(true);
+  }
+
+  function closePopup() {
+    setIsPopupOpened(false);
+  }
+
+  function errorHandler(err) {
+    openPopup({
+      isSuccess: false,
+      title: err.message,
+    });
+  }
+
+  function signHandler(data, path, successMsg='') {
+    if (data.status !== 200) {
+      throw data;
+    }
+    if (successMsg) {
+      openPopup({
+        isSuccess: true,
+        title: successMsg,
+      });
+    }
+    setCurrentUser(data);
+    setIsLogged(path !== '/' ? true : false);
+    history.push(path);
+  }
 
   return (
     <div className="page">
@@ -28,36 +64,36 @@ function App() {
             <Footer />
           </Route>
 
-          <Route path="/movies">
+          <ProtectedRoute path="/movies" isLogged={isLogged}>
             <LoggedHeader />
-            <Movies updateInfoTooltip = { setInfoTooltipData } />
+            <Movies errorHandler={ errorHandler } />
             <Footer />
-          </Route>
+          </ProtectedRoute>
 
-          <Route path="/saved-movies">
+          <ProtectedRoute path="/saved-movies" isLogged={isLogged}>
             <LoggedHeader />
-            <SavedMovies updateInfoTooltip = { setInfoTooltipData } />
+            <SavedMovies errorHandler={ errorHandler } />
             <Footer />
-          </Route>
+          </ProtectedRoute>
 
-          <Route path="/profile">
+          <ProtectedRoute path="/profile" isLogged={isLogged}>
             <LoggedHeader />
-            <Profile updateInfoTooltip = { setInfoTooltipData } />
-          </Route>
+            <Profile signHandler={ signHandler } errorHandler={ errorHandler } />
+          </ProtectedRoute>
 
           <Route path="/signup">
-            <Register updateInfoTooltip = { setInfoTooltipData } />
+            <Register signHandler={ signHandler } errorHandler={ errorHandler } />
           </Route>
 
           <Route path="/signin">
-            <Login updateInfoTooltip = { setInfoTooltipData } />
+            <Login signHandler={ signHandler } errorHandler={ errorHandler } />
           </Route>
 
           <Route path="*">
             <NotFound />
           </Route>
         </Switch>
-        <InfoTooltip infoTooltipData={ infoTooltipData } updateInfoTooltip = { setInfoTooltipData } />
+        <InfoTooltip isPopupOpened={ isPopupOpened } infoTooltipData={ infoTooltipData } closePopup = { closePopup } />
       </CurrentUserContext.Provider>
     </div>
   );

@@ -10,7 +10,13 @@ class MainApi {
     options.headers = this.headers;
     options.credentials = 'include';
     return fetch(this.baseUrl + url, options)
-      .then((res) => res.json())
+      .then((res) => {
+        return res.json()
+          .then((obj) => {
+            obj.status = res.status;
+            return obj;
+          })
+      })
   }
 
   getProfile() {
@@ -18,7 +24,7 @@ class MainApi {
   }
 
   changeProfile(data) {
-    return this._createRequest('/users/me', { method: 'PATCH', body: data })
+    return this._createRequest('/users/me', { method: 'PATCH', body: JSON.stringify(data) })
   }
 
   getMyMovies() {
@@ -26,7 +32,7 @@ class MainApi {
   }
 
   saveMovie(data) {
-    return this._createRequest('/movies', { method: 'POST', body: data });
+    return this._createRequest('/movies', { method: 'POST', body: JSON.stringify(data) });
   }
 
   deleteMovie(id) {
@@ -34,11 +40,11 @@ class MainApi {
   }
 
   register(data) {
-    return this._createRequest('/signup', { method: 'POST', body: data });
+    return this._createRequest('/signup', { method: 'POST', body: JSON.stringify(data) });
   }
 
   login(data) {
-    return this._createRequest('/signin', { method: 'POST', body: data });
+    return this._createRequest('/signin', { method: 'POST', body: JSON.stringify(data) });
   }
 
   logout() {
