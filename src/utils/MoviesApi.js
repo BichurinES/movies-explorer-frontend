@@ -7,9 +7,7 @@ class MoviesApi {
 
   getData() {
     return fetch(this._baseUrl, { method: 'GET' })
-      .then((res) => {
-        return res.json();
-      })
+      .then((res) => res.json())
   }
 }
 
