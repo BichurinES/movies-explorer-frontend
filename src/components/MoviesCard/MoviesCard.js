@@ -1,6 +1,6 @@
 import './MoviesCard.css';
 import { convertDurationInHours } from '../../utils/utils.js';
-import { BEATFILM_MOVIES_API_URL } from '../../utils/constants.js';
+import { BEATFILM_MOVIES_API_IMAGE_URL } from '../../utils/constants.js';
 
 export default function MoviesCard(props) {
   const { card, type } = props;
@@ -8,7 +8,7 @@ export default function MoviesCard(props) {
   return (
     <li className="movies-card">
       <a href={ card.trailerLink } className="movies-card__trailer-link page__button" target="_blank" rel="noreferrer">
-        <img src={ BEATFILM_MOVIES_API_URL + card.image.url } alt={ card.nameRU } className="movies-card__image" />
+        <img src={ BEATFILM_MOVIES_API_IMAGE_URL + card.image.url } alt={ card.nameRU } className="movies-card__image" />
       </a>
       <div className="movies-card__footer">
         <h2 className="movies-card__title">{ card.nameRU }</h2>

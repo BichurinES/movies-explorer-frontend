@@ -22,4 +22,4 @@ export const MOVIES_SECTION_SETTINGS = {
   },
 };
 
-export const BEATFILM_MOVIES_API_URL = 'https://api.nomoreparties.co';
+export const BEATFILM_MOVIES_API_IMAGE_URL = 'https://api.nomoreparties.co';

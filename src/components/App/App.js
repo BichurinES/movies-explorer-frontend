@@ -1,6 +1,7 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom'; 
 import './App.css';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import MainHeader from '../MainHeader/MainHeader';
 import LoggedHeader from '../LoggedHeader/LoggedHeader';
 import Footer from '../Footer/Footer';
@@ -11,46 +12,53 @@ import Profile from '../Profile/Profile';
 import Register from '../Register/Register';
 import Login from '../Login/Login';
 import NotFound from '../NotFound/NotFound';
+import InfoTooltip from '../InfoTooltip/InfoTooltip';
 
 function App() {
+  const [currentUser, setCurrentUser] = React.useState({});
+  const [infoTooltipData, setInfoTooltipData] = React.useState({});
+
   return (
     <div className="page">
-      <Switch>
-        <Route exact path="/">
-          <MainHeader />
-          <Main />
-          <Footer />
-        </Route>
+      <CurrentUserContext.Provider value={ currentUser }>
+        <Switch>
+          <Route exact path="/">
+            <MainHeader />
+            <Main />
+            <Footer />
+          </Route>
 
-        <Route path="/movies">
-          <LoggedHeader />
-          <Movies />
-          <Footer />
-        </Route>
+          <Route path="/movies">
+            <LoggedHeader />
+            <Movies updateInfoTooltip = { setInfoTooltipData } />
+            <Footer />
+          </Route>
 
-        <Route path="/saved-movies">
-          <LoggedHeader />
-          <SavedMovies />
-          <Footer />
-        </Route>
+          <Route path="/saved-movies">
+            <LoggedHeader />
+            <SavedMovies updateInfoTooltip = { setInfoTooltipData } />
+            <Footer />
+          </Route>
 
-        <Route path="/profile">
-          <LoggedHeader />
-          <Profile />
-        </Route>
+          <Route path="/profile">
+            <LoggedHeader />
+            <Profile updateInfoTooltip = { setInfoTooltipData } />
+          </Route>
 
-        <Route path="/signup">
-          <Register />
-        </Route>
+          <Route path="/signup">
+            <Register updateInfoTooltip = { setInfoTooltipData } />
+          </Route>
 
-        <Route path="/signin">
-          <Login />
-        </Route>
+          <Route path="/signin">
+            <Login updateInfoTooltip = { setInfoTooltipData } />
+          </Route>
 
-        <Route path="*">
-          <NotFound />
-        </Route>
-      </Switch>
+          <Route path="*">
+            <NotFound />
+          </Route>
+        </Switch>
+        <InfoTooltip infoTooltipData={ infoTooltipData } updateInfoTooltip = { setInfoTooltipData } />
+      </CurrentUserContext.Provider>
     </div>
   );
 }
