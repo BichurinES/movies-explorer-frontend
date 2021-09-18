@@ -12,7 +12,7 @@ export default function SavedMovies() {
     <main className="saved-movies-main">
       <SearchForm />
       <Preloader />
-      <MoviesCardList type='saved-movies' cards={ savedMovies } />
+      <MoviesCardList type='saved-movies' cards={ savedMovies ? savedMovies : [] } />
     </main>
   )
 }
