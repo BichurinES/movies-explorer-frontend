@@ -27,7 +27,7 @@ class MainApi {
     return this._createRequest('/users/me', { method: 'PATCH', body: JSON.stringify(data) })
   }
 
-  getMyMovies() {
+  getSavedMovies() {
     return this._createRequest('/movies', { method: 'GET' });
   }
 

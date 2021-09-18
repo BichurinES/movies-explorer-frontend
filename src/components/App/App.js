@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Switch, Route } from 'react-router-dom'; 
 import { useHistory } from 'react-router-dom';
 import './App.css';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
+import mainApi from '../../utils/MainApi';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import MainHeader from '../MainHeader/MainHeader';
 import LoggedHeader from '../LoggedHeader/LoggedHeader';
@@ -19,10 +20,10 @@ import InfoTooltip from '../InfoTooltip/InfoTooltip';
 function App() {
   const history = useHistory();
   const [currentUser, setCurrentUser] = useState({});
-  const [isLogged, setIsLogged] = useState(false);
+  const [isLogged, setIsLogged] = useState(localStorage.getItem('isLogged'));
   const [isPopupOpened, setIsPopupOpened] = useState(false);
   const [infoTooltipData, setInfoTooltipData] = useState({});
-  
+  console.log(currentUser);
   function openPopup(data) {
     setInfoTooltipData(data);
     setIsPopupOpened(true);
@@ -39,10 +40,31 @@ function App() {
     });
   }
 
-  function signHandler(data, path, successMsg='') {
+  function checkStatus(data) {
     if (data.status !== 200) {
       throw data;
     }
+  }
+
+  function getUserData() {
+    return mainApi.getProfile()
+      .then((data) => {
+        checkStatus(data);
+        return data;
+      });
+  }
+
+  function addSavedMovies(data) {
+    return mainApi.getSavedMovies()
+      .then((res) => {
+        checkStatus(res);
+        data.savedMovies = res;
+        return data;
+      });
+  }
+
+  function login(data, successMsg='') {
+    checkStatus(data);
     if (successMsg) {
       openPopup({
         isSuccess: true,
@@ -50,9 +72,38 @@ function App() {
       });
     }
     setCurrentUser(data);
-    setIsLogged(path !== '/' ? true : false);
-    history.push(path);
+    localStorage.setItem('isLogged', true);
+    setIsLogged(localStorage.getItem('isLogged'));
   }
+
+  function logoutHandler(data) {
+    checkStatus(data);
+    setCurrentUser({});
+    localStorage.setItem('isLogged', false);
+    setIsLogged(localStorage.getItem('isLogged'));
+    history.push("/");
+  }
+
+  function loginHandler(user, successMsg) {
+    return mainApi.login(user)
+      .then(getUserData)
+      .then(addSavedMovies)
+      .then((data) => {
+        login(data, successMsg);
+      })
+  }
+
+  useEffect(() => {
+    if (localStorage.getItem('isLogged') === 'true') {
+      getUserData()
+        .then(addSavedMovies)
+        .then((data) => {
+          checkStatus(data);
+          setCurrentUser(data);
+        })
+        .catch(errorHandler)
+    }
+  }, []);
 
   return (
     <div className="page">
@@ -78,15 +129,15 @@ function App() {
 
           <ProtectedRoute path="/profile" isLogged={isLogged}>
             <LoggedHeader />
-            <Profile signHandler={ signHandler } errorHandler={ errorHandler } />
+            <Profile submitHandler={ logoutHandler } errorHandler={ errorHandler } />
           </ProtectedRoute>
 
           <Route path="/signup">
-            <Register signHandler={ signHandler } errorHandler={ errorHandler } />
+            <Register submitHandler={ loginHandler } errorHandler={ errorHandler } />
           </Route>
 
           <Route path="/signin">
-            <Login signHandler={ signHandler } errorHandler={ errorHandler } />
+            <Login submitHandler={ loginHandler } errorHandler={ errorHandler } />
           </Route>
 
           <Route path="*">

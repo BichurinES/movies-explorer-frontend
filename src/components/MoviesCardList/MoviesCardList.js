@@ -1,18 +1,17 @@
-import React from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useEffect } from 'react'
 import './MoviesCardList.css';
 import { MOVIES_SECTION_SETTINGS } from '../../utils/constants.js';
 import MoviesCard from '../MoviesCard/MoviesCard';
 
 export default function MoviesCardList(props) {
-  // eslint-disable-next-line no-unused-vars
-  let timeout;
-  let currentArr = [];
   const { cards, type } = props;
   const settings = MOVIES_SECTION_SETTINGS;
 
-  const [displayMode, setDisplayMode] = React.useState(checkDisplayMode(window.innerWidth));
-  const [addedCardsCount, setAddedCardsCount] = React.useState(0);
-  const [isShowedAllCards, setIsShowedAllCards] = React.useState(false);
+  const [displayMode, setDisplayMode] = useState(checkDisplayMode(window.innerWidth));
+  const [addedCardsCount, setAddedCardsCount] = useState(0);
+  const [isShowedAllCards, setIsShowedAllCards] = useState(false);
+  const [currentArr, setCurrentArr] = useState([]);
   
   function checkDisplayMode(windowWidth) {
     if (windowWidth < settings.tablet.width) {
@@ -36,7 +35,6 @@ export default function MoviesCardList(props) {
       return;
     }
     setDisplayMode(currentMode);
-    updateCurrentArr();
   }
 
   function checkIsCardsLeft(originalArr, currentArr) {
@@ -48,21 +46,30 @@ export default function MoviesCardList(props) {
   }
 
   function updateCurrentArr() {
-    currentArr = cards.slice(0, countCurrentCards());
-    const isCardsLeft = checkIsCardsLeft(cards, currentArr);
+    const newArr = cards.slice(0, countCurrentCards());
+    setCurrentArr(newArr);
+    const isCardsLeft = checkIsCardsLeft(cards, newArr);
 
     if (isCardsLeft === isShowedAllCards) {
       return;
     }
     setIsShowedAllCards(isCardsLeft);
   }
+
+  useEffect(() => {
+    let timeout;
+    function updateDisplayWithTimeout() {
+      clearTimeout(timeout);
+      timeout = setTimeout(updateDisplayMode, 100);
+    }
+    
+    window.addEventListener('resize', updateDisplayWithTimeout);
+    updateCurrentArr();
+    return () => {
+      window.removeEventListener('resize', updateDisplayWithTimeout);
+    };
+  }, [displayMode, addedCardsCount, isShowedAllCards]);
   
-  window.addEventListener('resize', () => {
-    timeout = setTimeout(updateDisplayMode, 100);
-  });
-
-  updateCurrentArr();
-
   return (
     <section className={ `movies-cards ${ isShowedAllCards ? 'movies-cards_type_showed-all-cards' : '' }` }>
       <ul className="movies-card__list">
