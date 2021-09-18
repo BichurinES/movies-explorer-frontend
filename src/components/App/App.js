@@ -71,9 +71,11 @@ function App() {
         title: successMsg,
       });
     }
+    delete data.status;
     setCurrentUser(data);
     localStorage.setItem('isLogged', true);
     setIsLogged(localStorage.getItem('isLogged'));
+    history.push("/movies");
   }
 
   function logoutHandler(data) {
@@ -99,6 +101,7 @@ function App() {
         .then(addSavedMovies)
         .then((data) => {
           checkStatus(data);
+          delete data.status;
           setCurrentUser(data);
         })
         .catch(errorHandler)
@@ -129,7 +132,7 @@ function App() {
 
           <ProtectedRoute path="/profile" isLogged={isLogged}>
             <LoggedHeader />
-            <Profile submitHandler={ logoutHandler } errorHandler={ errorHandler } />
+            <Profile logoutHandler={ logoutHandler } updateUser={ setCurrentUser } checkStatus={ checkStatus } errorHandler={ errorHandler } />
           </ProtectedRoute>
 
           <Route path="/signup">
