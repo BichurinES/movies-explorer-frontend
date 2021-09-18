@@ -114,7 +114,7 @@ function App() {
   return (
     <div className="page">
       <CurrentUserContext.Provider value={ currentUser }>
-        <SavedMoviesContext.Provider value={ savedMovies }>
+        <SavedMoviesContext.Provider value={{ savedMovies, setSavedMovies }}>
           <Switch>
             <Route exact path="/">
               <MainHeader />

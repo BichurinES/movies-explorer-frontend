@@ -5,8 +5,7 @@ import { MOVIES_SECTION_SETTINGS } from '../../utils/constants.js';
 import MoviesCard from '../MoviesCard/MoviesCard';
 
 export default function MoviesCardList(props) {
-  
-  const { cards, type } = props;
+  const { cards, type, errorHandler } = props;
   const settings = MOVIES_SECTION_SETTINGS;
   const [displayMode, setDisplayMode] = useState(checkDisplayMode(window.innerWidth));
   const [addedCardsCount, setAddedCardsCount] = useState(0);
@@ -74,7 +73,7 @@ export default function MoviesCardList(props) {
     <section className={ `movies-cards ${ isShowedAllCards ? 'movies-cards_type_showed-all-cards' : '' }` }>
       <ul className="movies-card__list">
         {
-          currentArr.map((card) => <MoviesCard key={ type === 'saved-movies' ? card.movieId : card.id } card={ card } type={ type } />)
+          currentArr.map((card) => <MoviesCard key={ type === 'saved-movies' ? card.movieId : card.id } card={ card } type={ type } errorHandler={ errorHandler } />)
         }
       </ul>
       <button className={ `movies-card__more-button page__button ${ isShowedAllCards ? 'movies-card__more-button_hidden' : '' }` } type="button" name="more-button" onClick={ addCards }>Ещё</button>

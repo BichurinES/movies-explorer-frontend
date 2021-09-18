@@ -5,12 +5,14 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import './Movies.css';
 import { cards } from '../../utils/data.js';
 
-export default function Movies() {
+export default function Movies(props) {
+  const { errorHandler } = props;
+
   return (
     <main className="movies-main">
       <SearchForm />
       <Preloader />
-      <MoviesCardList type='default-movies' cards={ cards } />
+      <MoviesCardList type='default-movies' cards={ cards } errorHandler={ errorHandler } />
     </main>
   )
 }
