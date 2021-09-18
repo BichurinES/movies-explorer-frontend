@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 import './App.css';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
+import { SavedMoviesContext } from '../../contexts/SavedMoviesContext';
 import mainApi from '../../utils/MainApi';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import MainHeader from '../MainHeader/MainHeader';
@@ -20,10 +21,11 @@ import InfoTooltip from '../InfoTooltip/InfoTooltip';
 function App() {
   const history = useHistory();
   const [currentUser, setCurrentUser] = useState({});
+  const [savedMovies, setSavedMovies] = useState([]);
   const [isLogged, setIsLogged] = useState(localStorage.getItem('isLogged'));
   const [isPopupOpened, setIsPopupOpened] = useState(false);
   const [infoTooltipData, setInfoTooltipData] = useState({});
-  console.log(currentUser);
+  
   function openPopup(data) {
     setInfoTooltipData(data);
     setIsPopupOpened(true);
@@ -41,9 +43,13 @@ function App() {
   }
 
   function checkStatus(data) {
+    if (!data.status) {
+      return;
+    }
     if (data.status !== 200) {
       throw data;
     }
+    delete data.status;
   }
 
   function getUserData() {
@@ -58,7 +64,7 @@ function App() {
     return mainApi.getSavedMovies()
       .then((res) => {
         checkStatus(res);
-        data.savedMovies = res;
+        setSavedMovies(res);
         return data;
       });
   }
@@ -71,7 +77,7 @@ function App() {
         title: successMsg,
       });
     }
-    delete data.status;
+    
     setCurrentUser(data);
     localStorage.setItem('isLogged', true);
     setIsLogged(localStorage.getItem('isLogged'));
@@ -99,55 +105,54 @@ function App() {
     if (localStorage.getItem('isLogged') === 'true') {
       getUserData()
         .then(addSavedMovies)
-        .then((data) => {
-          checkStatus(data);
-          delete data.status;
-          setCurrentUser(data);
-        })
+        .then(setCurrentUser)
         .catch(errorHandler)
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div className="page">
       <CurrentUserContext.Provider value={ currentUser }>
-        <Switch>
-          <Route exact path="/">
-            <MainHeader />
-            <Main />
-            <Footer />
-          </Route>
+        <SavedMoviesContext.Provider value={ savedMovies }>
+          <Switch>
+            <Route exact path="/">
+              <MainHeader />
+              <Main />
+              <Footer />
+            </Route>
 
-          <ProtectedRoute path="/movies" isLogged={isLogged}>
-            <LoggedHeader />
-            <Movies errorHandler={ errorHandler } />
-            <Footer />
-          </ProtectedRoute>
+            <ProtectedRoute path="/movies" isLogged={isLogged}>
+              <LoggedHeader />
+              <Movies errorHandler={ errorHandler } />
+              <Footer />
+            </ProtectedRoute>
 
-          <ProtectedRoute path="/saved-movies" isLogged={isLogged}>
-            <LoggedHeader />
-            <SavedMovies errorHandler={ errorHandler } />
-            <Footer />
-          </ProtectedRoute>
+            <ProtectedRoute path="/saved-movies" isLogged={isLogged}>
+              <LoggedHeader />
+              <SavedMovies errorHandler={ errorHandler } />
+              <Footer />
+            </ProtectedRoute>
 
-          <ProtectedRoute path="/profile" isLogged={isLogged}>
-            <LoggedHeader />
-            <Profile logoutHandler={ logoutHandler } updateUser={ setCurrentUser } checkStatus={ checkStatus } errorHandler={ errorHandler } />
-          </ProtectedRoute>
+            <ProtectedRoute path="/profile" isLogged={isLogged}>
+              <LoggedHeader />
+              <Profile logoutHandler={ logoutHandler } updateUser={ setCurrentUser } checkStatus={ checkStatus } errorHandler={ errorHandler } />
+            </ProtectedRoute>
 
-          <Route path="/signup">
-            <Register submitHandler={ loginHandler } errorHandler={ errorHandler } />
-          </Route>
+            <Route path="/signup">
+              <Register submitHandler={ loginHandler } errorHandler={ errorHandler } />
+            </Route>
 
-          <Route path="/signin">
-            <Login submitHandler={ loginHandler } errorHandler={ errorHandler } />
-          </Route>
+            <Route path="/signin">
+              <Login submitHandler={ loginHandler } errorHandler={ errorHandler } />
+            </Route>
 
-          <Route path="*">
-            <NotFound />
-          </Route>
-        </Switch>
-        <InfoTooltip isPopupOpened={ isPopupOpened } infoTooltipData={ infoTooltipData } closePopup = { closePopup } />
+            <Route path="*">
+              <NotFound />
+            </Route>
+          </Switch>
+          <InfoTooltip isPopupOpened={ isPopupOpened } infoTooltipData={ infoTooltipData } closePopup = { closePopup } />
+        </SavedMoviesContext.Provider>
       </CurrentUserContext.Provider>
     </div>
   );

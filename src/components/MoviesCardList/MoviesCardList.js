@@ -1,15 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, useContext } from 'react';
-import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import './MoviesCardList.css';
 import { MOVIES_SECTION_SETTINGS } from '../../utils/constants.js';
 import MoviesCard from '../MoviesCard/MoviesCard';
 
 export default function MoviesCardList(props) {
-  const { savedMovies } = useContext(CurrentUserContext);
+  
   const { cards, type } = props;
   const settings = MOVIES_SECTION_SETTINGS;
-
   const [displayMode, setDisplayMode] = useState(checkDisplayMode(window.innerWidth));
   const [addedCardsCount, setAddedCardsCount] = useState(0);
   const [isShowedAllCards, setIsShowedAllCards] = useState(false);
@@ -70,7 +68,7 @@ export default function MoviesCardList(props) {
     return () => {
       window.removeEventListener('resize', updateDisplayWithTimeout);
     };
-  }, [displayMode, addedCardsCount, isShowedAllCards, savedMovies]);
+  }, [displayMode, addedCardsCount, isShowedAllCards, cards]);
   
   return (
     <section className={ `movies-cards ${ isShowedAllCards ? 'movies-cards_type_showed-all-cards' : '' }` }>

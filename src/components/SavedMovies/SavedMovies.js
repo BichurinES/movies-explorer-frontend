@@ -1,12 +1,12 @@
 import { useContext } from 'react';
-import { CurrentUserContext } from '../../contexts/CurrentUserContext';
+import { SavedMoviesContext } from '../../contexts/SavedMoviesContext';
 import SearchForm from '../SearchForm/SearchForm';
 import Preloader from '../Preloader/Preloader';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import './SavedMovies.css';
 
 export default function SavedMovies() {
-  const { savedMovies } = useContext(CurrentUserContext);
+  const savedMovies = useContext(SavedMoviesContext);
 
   return (
     <main className="saved-movies-main">

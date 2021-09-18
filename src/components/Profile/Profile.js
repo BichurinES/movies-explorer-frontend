@@ -27,10 +27,7 @@ export default function Profile(props) {
     mainApi.changeProfile({ name, email })
       .then((res) => {
         checkStatus(res);
-        const newUserData = {...user};
-        newUserData.name = res.name;
-        newUserData.email = res.email;
-        updateUser(newUserData);
+        updateUser(res);
       })
       .catch(errorHandler)
   }
