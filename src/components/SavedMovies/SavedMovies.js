@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from 'react';
 import { SavedMoviesContext } from '../../contexts/SavedMoviesContext';
 import { searchMovies } from '../../utils/utils.js';
-import { MOVIES_NOT_FOUND_MSG, SEARCH_SERVER_ERROR_MSG } from '../../utils/constants.js';
+import { MOVIES_NOT_FOUND_MSG } from '../../utils/constants.js';
 import SearchForm from '../SearchForm/SearchForm';
 import Preloader from '../Preloader/Preloader';
 import SearchError from '../SearchError/SearchError';
