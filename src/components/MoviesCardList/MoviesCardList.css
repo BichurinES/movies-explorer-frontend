@@ -10,6 +10,10 @@
   padding-bottom: 140px;
 }
 
+.movies-cards_type_hidden {
+  display: none;
+}
+
 .movies-card__list {
   display: grid;
   padding: 0;

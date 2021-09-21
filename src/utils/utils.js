@@ -21,14 +21,19 @@ export function formatCard(card) {
   return formatedCard;
 }
 
-export function searchMovies(req, base) {
-  const normalizeReq = req.toLowerCase();
+export function isShortMovie(movie) {
+  return movie.duration <= 40;
+}
+
+export function searchMovies(reqData, base) {
+  const { searchString, isShortMovieOn } = reqData;
+  const normalizeString = searchString.toLowerCase();
   const result = [];
   const exactMatch = [];
   const oneOrMoreWordsMatch = [];
   const descriptionMatch = [];
 
-  const keyWords = normalizeReq.split(' ').filter((word) => word.length > 1);
+  const keyWords = normalizeString.split(' ').filter((word) => word.length > 1);
   const oneKeyWord = keyWords.length === 1 ? keyWords[0] : null;
   
   function isFieldsIncludes(substr, firstField, secondField = null) {
@@ -42,17 +47,21 @@ export function searchMovies(req, base) {
   function searchExactMatch(movie, normalizeData) {
     const { nameRU, nameEN } = normalizeData;
     if (
-      isFieldsIncludes(normalizeReq, nameRU, nameEN) || 
-      isFieldsIncludes(getWordWithoutEnding(oneKeyWord), nameRU, nameEN)
+      isFieldsIncludes(normalizeString, nameRU, nameEN) || 
+        (
+          oneKeyWord &&
+          isFieldsIncludes(getWordWithoutEnding(oneKeyWord), nameRU, nameEN)
+        )
       ) {
       exactMatch.push(movie);
-      return;
+      return true;
     }
   }
 
   function searchOneOrMoreWordsMatch(movie, normalizeData) {
     if (!oneKeyWord) {
       const { nameRU, nameEN, description } = normalizeData;
+      let isSuccess = false;
 
       for (let i = 0; i < keyWords.length; i++) {
         const shortWord = getWordWithoutEnding(keyWords[i]);
@@ -62,6 +71,7 @@ export function searchMovies(req, base) {
           isFieldsIncludes(shortWord, nameRU, nameEN)
         ) {
           oneOrMoreWordsMatch.push(movie);
+          isSuccess = true;
           break;
         }
 
@@ -70,20 +80,26 @@ export function searchMovies(req, base) {
           isFieldsIncludes(shortWord, description)
         ) {
           descriptionMatch.push(movie);
+          isSuccess = true;
           break;
         }
       }
+
+      return isSuccess;
     }
   }
 
   function searchDescriptionMatch(movie, normalizeData) {
     const { description } = normalizeData;
     if (
-      isFieldsIncludes(normalizeReq, description) || 
-      isFieldsIncludes(getWordWithoutEnding(oneKeyWord), description)
+      isFieldsIncludes(normalizeString, description) || 
+      (
+        oneKeyWord &&
+        isFieldsIncludes(getWordWithoutEnding(oneKeyWord), description)
+      )
     ) {
       descriptionMatch.push(movie);
-      return;
+      return true;
     }
   }
 
@@ -95,11 +111,19 @@ export function searchMovies(req, base) {
       description: description ? description.toLowerCase() : description,
     };
     
-    searchExactMatch(movie, normalizeData);
-    searchOneOrMoreWordsMatch(movie, normalizeData);
-    searchDescriptionMatch(movie, normalizeData);
+    if (searchExactMatch(movie, normalizeData)) {
+      return;
+    }
+    if (searchOneOrMoreWordsMatch(movie, normalizeData)) {
+      return;
+    }
+    if (searchDescriptionMatch(movie, normalizeData)) {
+      return;
+    }
   });
-
   result.push(...exactMatch, ...oneOrMoreWordsMatch, ...descriptionMatch);
+  if (isShortMovieOn) {
+    return result.filter(isShortMovie);
+  }
   return result;
 }

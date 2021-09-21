@@ -26,6 +26,11 @@ function App() {
   const [isPopupOpened, setIsPopupOpened] = useState(false);
   const [infoTooltipData, setInfoTooltipData] = useState({});
   
+  function updateSavedCards(movies) {
+    localStorage.setItem('savedMovies', JSON.stringify(movies));
+    setSavedMovies(movies);
+  }
+
   function openPopup(data) {
     setInfoTooltipData(data);
     setIsPopupOpened(true);
@@ -64,7 +69,7 @@ function App() {
     return mainApi.getSavedMovies()
       .then((res) => {
         checkStatus(res);
-        setSavedMovies(res);
+        updateSavedCards(res);
         return data;
       });
   }
@@ -114,7 +119,7 @@ function App() {
   return (
     <div className="page">
       <CurrentUserContext.Provider value={ currentUser }>
-        <SavedMoviesContext.Provider value={{ savedMovies, setSavedMovies }}>
+        <SavedMoviesContext.Provider value={{ savedMovies, updateSavedCards }}>
           <Switch>
             <Route exact path="/">
               <MainHeader />

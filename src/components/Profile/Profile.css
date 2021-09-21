@@ -55,7 +55,6 @@
 
 .profile__field {
   width: 80%;
-  height: 14px;
   max-width: 350px;
   padding: 16px 0;
   background-color: inherit;
@@ -68,10 +67,11 @@
   line-height: 13px;
   text-align: right;
   color: #fff;
+  -webkit-text-fill-color: #fff;
 }
 
 .profile__field:focus {
-  outline: none;
+  outline: 0;
 }
 
 .profile__field:focus::placeholder {

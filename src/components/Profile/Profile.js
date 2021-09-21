@@ -41,7 +41,7 @@ export default function Profile(props) {
 
   return (
     <main className="profile">
-      <form className="profile__form" onSubmit={ submitHandler }>
+      <form className="profile__form" onSubmit={ submitHandler } autocomplete="off">
         <h1 className="profile__title">{`Привет, ${user.name}!`}</h1>
         <fieldset className="profile__fields-container">
           <div className="profile__field-wrap">

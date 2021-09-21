@@ -1,11 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import './MoviesCardList.css';
 import { MOVIES_SECTION_SETTINGS } from '../../utils/constants.js';
 import MoviesCard from '../MoviesCard/MoviesCard';
 
 export default function MoviesCardList(props) {
-  const { cards, type, errorHandler } = props;
+  const { cards, type, isPreloaderVisible, isSearchErrorVisible, errorHandler } = props;
   const settings = MOVIES_SECTION_SETTINGS;
   const [displayMode, setDisplayMode] = useState(checkDisplayMode(window.innerWidth));
   const [addedCardsCount, setAddedCardsCount] = useState(0);
@@ -70,7 +70,13 @@ export default function MoviesCardList(props) {
   }, [displayMode, addedCardsCount, isShowedAllCards, cards]);
   
   return (
-    <section className={ `movies-cards ${ isShowedAllCards ? 'movies-cards_type_showed-all-cards' : '' }` }>
+    <section 
+      className={ 
+        `movies-cards
+        ${ isShowedAllCards ? 'movies-cards_type_showed-all-cards' : '' }
+        ${ isPreloaderVisible || isSearchErrorVisible ? 'movies-cards_type_hidden' : '' }` 
+      }
+    >
       <ul className="movies-card__list">
         {
           currentArr.map((card) => <MoviesCard key={ type === 'saved-movies' ? card.movieId : card.id } card={ card } type={ type } errorHandler={ errorHandler } />)

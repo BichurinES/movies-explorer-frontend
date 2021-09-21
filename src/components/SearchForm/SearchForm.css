@@ -25,6 +25,7 @@
   font-size: 18px;
   line-height: 22px;
   color: #fff;
+  -webkit-text-fill-color: #fff;
 }
 
 .search-form__field::placeholder {

@@ -6,7 +6,7 @@ import { convertDurationInHours, formatCard } from '../../utils/utils.js';
 import { BEATFILM_MOVIES_API_IMAGE_URL } from '../../utils/constants.js';
 
 export default function MoviesCard(props) {
-  const { savedMovies, setSavedMovies } = useContext(SavedMoviesContext);
+  const { savedMovies, updateSavedCards } = useContext(SavedMoviesContext);
   const { card, type, errorHandler } = props;
   const [isSaved, setIsSaved] = useState(false);
   
@@ -31,7 +31,7 @@ export default function MoviesCard(props) {
           throw deletedCard;
         }
         const movies = savedMovies.filter((item) => item._id !== deletedCard._id);
-        setSavedMovies(movies);
+        updateSavedCards(movies);
       })
       .catch(errorHandler);
   }
@@ -43,7 +43,7 @@ export default function MoviesCard(props) {
           throw res;
         }
         setIsSaved(true);
-        setSavedMovies([...savedMovies, res])
+        updateSavedCards([...savedMovies, res])
       })
       .catch(errorHandler);
   }
