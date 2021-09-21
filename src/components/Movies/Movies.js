@@ -11,12 +11,12 @@ import './Movies.css';
 export default function Movies(props) {
   let startMovies = localStorage.getItem('searchedMovies');
   startMovies = startMovies ? JSON.parse(startMovies) : [];
-  
+
   const [cards, setCards] = useState(startMovies);
   const [isPreloaderVisible, setIsPreloaderVisible] = useState(false);
   const [isSearchErrorVisible, setIsSearchErrorVisible] = useState(false);
   const [errorText, setErrorText] = useState('');
-  const { errorHandler } = props;
+  const { checkStatus, errorHandler } = props;
 
   function updateCards(cards) {
     localStorage.setItem('searchedMovies', JSON.stringify(cards));
@@ -55,6 +55,7 @@ export default function Movies(props) {
         cards={ cards }
         isPreloaderVisible={ isPreloaderVisible }
         isSearchErrorVisible={ isSearchErrorVisible }
+        checkStatus={ checkStatus }
         errorHandler={ errorHandler } 
       />
     </main>

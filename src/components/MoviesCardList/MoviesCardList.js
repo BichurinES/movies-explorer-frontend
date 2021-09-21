@@ -5,7 +5,7 @@ import { MOVIES_SECTION_SETTINGS } from '../../utils/constants.js';
 import MoviesCard from '../MoviesCard/MoviesCard';
 
 export default function MoviesCardList(props) {
-  const { cards, type, isPreloaderVisible, isSearchErrorVisible, errorHandler } = props;
+  const { cards, type, isPreloaderVisible, isSearchErrorVisible, checkStatus, errorHandler } = props;
   const settings = MOVIES_SECTION_SETTINGS;
   const [displayMode, setDisplayMode] = useState(checkDisplayMode(window.innerWidth));
   const [addedCardsCount, setAddedCardsCount] = useState(0);
@@ -79,7 +79,7 @@ export default function MoviesCardList(props) {
     >
       <ul className="movies-card__list">
         {
-          currentArr.map((card) => <MoviesCard key={ type === 'saved-movies' ? card.movieId : card.id } card={ card } type={ type } errorHandler={ errorHandler } />)
+          currentArr.map((card) => <MoviesCard key={ type === 'saved-movies' ? card.movieId : card.id } card={ card } type={ type } checkStatus={ checkStatus } errorHandler={ errorHandler } />)
         }
       </ul>
       <button className={ `movies-card__more-button page__button ${ isShowedAllCards ? 'movies-card__more-button_hidden' : '' }` } type="button" name="more-button" onClick={ addCards }>Ещё</button>

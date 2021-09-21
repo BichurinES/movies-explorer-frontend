@@ -134,13 +134,13 @@ function App() {
 
             <ProtectedRoute path="/movies" isLogged={isLogged}>
               <LoggedHeader />
-              <Movies errorHandler={ errorHandler } />
+              <Movies checkStatus={ checkStatus } errorHandler={ errorHandler } />
               <Footer />
             </ProtectedRoute>
 
             <ProtectedRoute path="/saved-movies" isLogged={isLogged}>
               <LoggedHeader />
-              <SavedMovies errorHandler={ errorHandler } />
+              <SavedMovies checkStatus={ checkStatus } errorHandler={ errorHandler } />
               <Footer />
             </ProtectedRoute>
 

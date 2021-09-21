@@ -7,7 +7,7 @@ import { BEATFILM_MOVIES_API_IMAGE_URL } from '../../utils/constants.js';
 
 export default function MoviesCard(props) {
   const { savedMovies, updateSavedCards } = useContext(SavedMoviesContext);
-  const { card, type, errorHandler } = props;
+  const { card, type, checkStatus, errorHandler } = props;
   const [isSaved, setIsSaved] = useState(false);
   
   function findMovieObject(shortId) {
@@ -27,9 +27,7 @@ export default function MoviesCard(props) {
 
     mainApi.deleteMovie(movie._id)
       .then((deletedCard) => {
-        if (deletedCard.status !== 200) {
-          throw deletedCard;
-        }
+        checkStatus(deletedCard);
         const movies = savedMovies.filter((item) => item._id !== deletedCard._id);
         updateSavedCards(movies);
       })
@@ -39,9 +37,7 @@ export default function MoviesCard(props) {
   function saveMovie() {
     mainApi.saveMovie(formatCard(card))
       .then((res) => {
-        if (res.status !== 200) {
-          throw res;
-        }
+        checkStatus(res);
         setIsSaved(true);
         updateSavedCards([...savedMovies, res])
       })

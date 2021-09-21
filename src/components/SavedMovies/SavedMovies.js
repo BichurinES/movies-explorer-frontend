@@ -17,7 +17,7 @@ export default function SavedMovies(props) {
   const [isPreloaderVisible, setIsPreloaderVisible] = useState(false);
   const [isSearchErrorVisible, setIsSearchErrorVisible] = useState(false);
   const [errorText, setErrorText] = useState('');
-  const { errorHandler } = props;
+  const { checkStatus, errorHandler } = props;
 
   function searchMoviesHandler(search) {
     setIsSearchErrorVisible(false);
@@ -47,6 +47,7 @@ export default function SavedMovies(props) {
         cards={ cards ? cards : [] }
         isPreloaderVisible={ isPreloaderVisible }
         isSearchErrorVisible={ isSearchErrorVisible }
+        checkStatus={ checkStatus }
         errorHandler={ errorHandler }
       />
     </main>
