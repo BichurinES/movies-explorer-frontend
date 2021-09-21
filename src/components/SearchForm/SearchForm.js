@@ -20,7 +20,7 @@ export default function SearchForm(props) {
     <form name="search-form" className="search-form" onSubmit={ submitHandler }>
       <div className="search-form__search-bar">
         <input className="search-form__field" type="text" name="search" placeholder="Фильм" required={ type === 'saved-movies' ? false : true } value={ searchString } onChange={ changeSearchHandler } />
-        <input className="search-form__submit-button page__button" type="submit" />
+        <input className="search-form__submit-button page__button" type="submit" disabled />
       </div>
       <div className="search-form__filter">
         <label htmlFor="filter-checkbox" className="search-form__filter-label">Короткометражки</label>

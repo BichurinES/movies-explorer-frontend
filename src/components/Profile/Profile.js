@@ -52,7 +52,7 @@ export default function Profile(props) {
           </div>
           <span className="profile__error"></span>
         </fieldset>
-        <input className="profile__edit-button page__button" type="submit" value="Редактировать" />
+        <input className="profile__edit-button page__button" type="submit" value="Редактировать" disabled />
       </form>
       <button className="profile__logout-button page__button" onClick={ logout }>Выйти из аккаунта</button>
     </main>

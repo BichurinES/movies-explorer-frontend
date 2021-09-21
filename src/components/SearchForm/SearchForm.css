@@ -51,6 +51,14 @@
   font-size: 0;
 }
 
+.search-form__submit-button_disable {
+  opacity: .3;
+}
+
+.search-form__submit-button_disable:hover {
+  opacity: .3;
+}
+
 .search-form__filter {
   display: flex;
   justify-content: center;

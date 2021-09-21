@@ -107,6 +107,14 @@
   color: #fff;
 }
 
+.entry__signup-button_disable {
+  opacity: .3;
+}
+
+.entry__signup-button_disable:hover {
+  opacity: .3;
+}
+
 .entry__caption {
   margin: 0;
   margin-top: 14px;

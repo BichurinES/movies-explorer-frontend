@@ -49,7 +49,7 @@ export default function Entry(props) {
           <input id="password-field" className="entry__field entry__field_type_error" placeholder="Пароль" type="password" name="password" noValidate required value={ password } onChange={ changePasswordHandler } />
           <span className="entry__error entry__error_visible">Что-то пошло не так...</span>
         </fieldset>
-        <input className="entry__signup-button" type="submit" value={ buttonName } />
+        <input className="entry__signup-button" type="submit" value={ buttonName } disabled />
         <p className="entry__caption">{ captionText }<Link className="entry__caption-link page__link" to={ linkPath }>{ linkText }</Link></p>
       </form>
     </main>
