@@ -31,6 +31,11 @@ function App() {
     setSavedMovies(movies);
   }
 
+  function updateCurrentUser(user) {
+    localStorage.setItem('user', JSON.stringify(user));
+    setCurrentUser(user);
+  }
+
   function openPopup(data) {
     setInfoTooltipData(data);
     setIsPopupOpened(true);
@@ -83,7 +88,7 @@ function App() {
       });
     }
     
-    setCurrentUser(data);
+    updateCurrentUser(data);
     localStorage.setItem('isLogged', true);
     setIsLogged(localStorage.getItem('isLogged'));
     history.push("/movies");
@@ -91,7 +96,7 @@ function App() {
 
   function logoutHandler(data) {
     checkStatus(data);
-    setCurrentUser({});
+    updateCurrentUser({});
     localStorage.setItem('isLogged', false);
     setIsLogged(localStorage.getItem('isLogged'));
     history.push("/");
@@ -110,7 +115,7 @@ function App() {
     if (localStorage.getItem('isLogged') === 'true') {
       getUserData()
         .then(addSavedMovies)
-        .then(setCurrentUser)
+        .then(updateCurrentUser)
         .catch(errorHandler)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -141,7 +146,7 @@ function App() {
 
             <ProtectedRoute path="/profile" isLogged={isLogged}>
               <LoggedHeader />
-              <Profile logoutHandler={ logoutHandler } updateUser={ setCurrentUser } checkStatus={ checkStatus } errorHandler={ errorHandler } />
+              <Profile logoutHandler={ logoutHandler } updateUser={ updateCurrentUser } checkStatus={ checkStatus } errorHandler={ errorHandler } />
             </ProtectedRoute>
 
             <Route path="/signup">

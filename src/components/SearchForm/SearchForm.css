@@ -29,7 +29,7 @@
 }
 
 .search-form__field::placeholder {
-  color: #8B8B8B;
+  -webkit-text-fill-color: #8B8B8B;
 }
 
 .search-form__field:focus {

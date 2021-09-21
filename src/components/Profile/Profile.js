@@ -1,18 +1,13 @@
-import { useContext, useState, useEffect } from 'react';
-import { CurrentUserContext } from '../../contexts/CurrentUserContext';
+import { useState } from 'react';
 import mainApi from '../../utils/MainApi';
 import './Profile.css';
 
 export default function Profile(props) {
-  const user = useContext(CurrentUserContext);
+  let startUserData = localStorage.getItem('user');
+  startUserData = startUserData ? JSON.parse(startUserData) : {};
   const { logoutHandler, updateUser, checkStatus, errorHandler } = props;
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  
-  useEffect(() => {
-    setName(user.name);
-    setEmail(user.email);
-  }, [user]);
+  const [name, setName] = useState(startUserData.name);
+  const [email, setEmail] = useState(startUserData.email);
 
   function changeNameHandler(evt) {
     setName(evt.target.value);
@@ -27,6 +22,8 @@ export default function Profile(props) {
     mainApi.changeProfile({ name, email })
       .then((res) => {
         checkStatus(res);
+        setName(res.name);
+        setEmail(res.email);
         updateUser(res);
       })
       .catch(errorHandler)
@@ -42,7 +39,7 @@ export default function Profile(props) {
   return (
     <main className="profile">
       <form className="profile__form" onSubmit={ submitHandler } autocomplete="off">
-        <h1 className="profile__title">{`Привет, ${user.name}!`}</h1>
+        <h1 className="profile__title">{`Привет, ${startUserData.name}!`}</h1>
         <fieldset className="profile__fields-container">
           <div className="profile__field-wrap">
             <label className="profile__field-name" htmlFor="name-field">Имя</label>
