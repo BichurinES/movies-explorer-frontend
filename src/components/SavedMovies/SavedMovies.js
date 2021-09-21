@@ -9,8 +9,11 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import './SavedMovies.css';
 
 export default function SavedMovies(props) {
+  let startMovies = localStorage.getItem('savedMovies');
+  startMovies = startMovies ? JSON.parse(startMovies) : [];
+
   const { savedMovies } = useContext(SavedMoviesContext);
-  const [cards, setCards] = useState(savedMovies);
+  const [cards, setCards] = useState(startMovies);
   const [isPreloaderVisible, setIsPreloaderVisible] = useState(false);
   const [isSearchErrorVisible, setIsSearchErrorVisible] = useState(false);
   const [errorText, setErrorText] = useState('');

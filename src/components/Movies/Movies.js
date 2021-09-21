@@ -9,15 +9,22 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import './Movies.css';
 
 export default function Movies(props) {
-  const [cards, setCards] = useState([]);
+  let startMovies = localStorage.getItem('searchedMovies');
+  startMovies = startMovies ? JSON.parse(startMovies) : [];
+  
+  const [cards, setCards] = useState(startMovies);
   const [isPreloaderVisible, setIsPreloaderVisible] = useState(false);
   const [isSearchErrorVisible, setIsSearchErrorVisible] = useState(false);
   const [errorText, setErrorText] = useState('');
   const { errorHandler } = props;
 
+  function updateCards(cards) {
+    localStorage.setItem('searchedMovies', JSON.stringify(cards));
+    setCards(cards);
+  }
+  
   function searchMoviesHandler(search) {
     setIsSearchErrorVisible(false);
-    setCards([]);
     setIsPreloaderVisible(true);
     return moviesApi.getData()
       .then((data) => {
@@ -28,7 +35,7 @@ export default function Movies(props) {
           setIsSearchErrorVisible(true);
         } else {
           setIsPreloaderVisible(false);
-          setCards(cardsData);
+          updateCards(cardsData);
         }
       })
       .catch(() => {
