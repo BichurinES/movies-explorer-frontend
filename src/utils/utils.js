@@ -18,6 +18,11 @@ export function formatCard(card) {
   delete formatedCard.trailerLink;
   delete formatedCard.created_at;
   delete formatedCard.updated_at;
+  for (let key in formatedCard) {
+    if (formatedCard[key] === null) {
+      delete formatedCard[key];
+    }
+  }
   return formatedCard;
 }
 
@@ -25,8 +30,11 @@ export function isShortMovie(movie) {
   return movie.duration <= 40;
 }
 
-export function searchMovies(reqData, base) {
-  const { searchString, isShortMovieOn } = reqData;
+export function filterShortMovies(movies) {
+  return movies.filter(isShortMovie);
+}
+
+export function searchMovies(searchString, base) {
   const normalizeString = searchString.toLowerCase();
   const result = [];
   const exactMatch = [];
@@ -126,8 +134,5 @@ export function searchMovies(reqData, base) {
     }
   });
   result.push(...exactMatch, ...nameWithoutEndMatch, ...descriptionMatch, ...descriptionWithoutEndMatch);
-  if (isShortMovieOn) {
-    return result.filter(isShortMovie);
-  }
   return result;
 }

@@ -1,31 +1,18 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom'; 
 import Logo from '../Logo/Logo';
+import ValidationForm from '../ValidationForm/ValidationForm';
+import { AUTO_NAME_ERROR_MSG, CORRECT_NAME_ERROR_MSG } from '../../utils/constants';
 import './Entry.css';
 
 export default function Entry(props) {
   const { submitHandler, title, isNameRequired, buttonName, captionText, linkText, linkPath } = props;
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const { values, handleChange, errors, isValid } = ValidationForm();
 
-  function changeNameHandler(evt) {
-    setName(evt.target.value);
-  }
-
-  function changeEmailHandler(evt) {
-    setEmail(evt.target.value);
-  }
-
-  function changePasswordHandler(evt) {
-    setPassword(evt.target.value);
-  }
-
+  errors.name = errors.name === AUTO_NAME_ERROR_MSG ? CORRECT_NAME_ERROR_MSG : errors.name;
   function submitForm(evt) {
     evt.preventDefault();
-    const userData = isNameRequired ? 
-      { name, email, password } :
-      { email, password };
+    const userData = values;
     submitHandler(userData);
   }
 
@@ -38,18 +25,18 @@ export default function Entry(props) {
           { isNameRequired ? (
             <>
               <label className="entry__field-name" htmlFor="name-field">Имя</label>
-              <input id="name-field" className="entry__field" type="text" name="name" minLength="2" placeholder="Имя" noValidate required value={ name } onChange={ changeNameHandler }/>
-              <span className="entry__error"></span>
+              <input id="name-field" className={ `entry__field ${ errors.name ? 'entry__field_type_error' : '' }` } type="text" name="name" minLength="2" maxLength="30" pattern="[a-zA-Zа-яА-Я -]+" placeholder="Имя" noValidate required onChange={ handleChange }/>
+              <span className={ `entry__error ${ errors.name ? 'entry__error_visible' : '' }` }>{ errors.name }</span>
             </>
           ) : '' }
           <label className="entry__field-name" htmlFor="email-field">E-mail</label>
-          <input id="email-field" className="entry__field" type="email" name="email" placeholder="E-mail" noValidate required value={ email } onChange={ changeEmailHandler } />
-          <span className="entry__error"></span>
+          <input id="email-field" className={ `entry__field ${ errors.email ? 'entry__field_type_error' : '' }` } type="email" name="email" placeholder="E-mail" noValidate required onChange={ handleChange } />
+          <span className={ `entry__error ${ errors.email ? 'entry__error_visible' : '' }` }>{ errors.email }</span>
           <label className="entry__field-name" htmlFor="password-field">Пароль</label>
-          <input id="password-field" className="entry__field entry__field_type_error" placeholder="Пароль" type="password" name="password" noValidate required value={ password } onChange={ changePasswordHandler } />
-          <span className="entry__error entry__error_visible">Что-то пошло не так...</span>
+          <input id="password-field" className={ `entry__field ${ errors.password ? 'entry__field_type_error' : '' }` } placeholder="Пароль" type="password" name="password" minLength={ isNameRequired ? 8 : 0 } noValidate required onChange={ handleChange } />
+          <span className={ `entry__error ${ errors.password ? 'entry__error_visible' : '' }` }>{ errors.password }</span>
         </fieldset>
-        <input className="entry__signup-button" type="submit" value={ buttonName } disabled />
+        <input className={ `entry__signup-button ${ !isValid ? 'entry__signup-button_disable' : '' }` } type="submit" value={ buttonName } disabled={ !isValid ? true : false } />
         <p className="entry__caption">{ captionText }<Link className="entry__caption-link page__link" to={ linkPath }>{ linkText }</Link></p>
       </form>
     </main>

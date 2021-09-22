@@ -22,7 +22,7 @@ function App() {
   const history = useHistory();
   const [currentUser, setCurrentUser] = useState({});
   const [savedMovies, setSavedMovies] = useState([]);
-  const [isLogged, setIsLogged] = useState(localStorage.getItem('isLogged'));
+  const [isLogged, setIsLogged] = useState(localStorage.getItem('isLogged') === 'true');
   const [isPopupOpened, setIsPopupOpened] = useState(false);
   const [infoTooltipData, setInfoTooltipData] = useState({});
   
@@ -53,7 +53,7 @@ function App() {
   }
 
   function checkStatus(data) {
-    if (!data.status) {
+    if (!data || !data.status) {
       return;
     }
     if (data.status !== 200) {
@@ -62,7 +62,8 @@ function App() {
     delete data.status;
   }
 
-  function getUserData() {
+  function getUserData(data) {
+    checkStatus(data);
     return mainApi.getProfile()
       .then((data) => {
         checkStatus(data);
@@ -99,6 +100,8 @@ function App() {
     updateCurrentUser({});
     localStorage.setItem('isLogged', false);
     setIsLogged(localStorage.getItem('isLogged'));
+    localStorage.removeItem('savedMovies');
+    localStorage.removeItem('searchedMovies');
     history.push("/");
   }
 
@@ -112,13 +115,12 @@ function App() {
   }
 
   useEffect(() => {
-    if (localStorage.getItem('isLogged') === 'true') {
+    if (isLogged) {
       getUserData()
         .then(addSavedMovies)
         .then(updateCurrentUser)
         .catch(errorHandler)
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -150,7 +152,7 @@ function App() {
             </ProtectedRoute>
 
             <Route path="/signup">
-              <Register submitHandler={ loginHandler } errorHandler={ errorHandler } />
+              <Register submitHandler={ loginHandler } checkStatus={ checkStatus } errorHandler={ errorHandler } />
             </Route>
 
             <Route path="/signin">

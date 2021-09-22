@@ -40,6 +40,7 @@
 }
 
 .entry__field-name {
+  margin-top: 20px;
   margin-bottom: 10px;
   font-style: normal;
   font-weight: normal;
@@ -48,9 +49,12 @@
   color: #8b8b8b;
 }
 
+.entry__field-name:first-of-type {
+  margin-top: 0;
+}
+
 .entry__field {
   padding: 15px;
-  margin-bottom: 20px;
   background-color: #2F2F2F;
   outline: 0;
   border: none;
@@ -60,10 +64,6 @@
   font-size: 13px;
   line-height: 16px;
   color: #fff;
-}
-
-.entry__field:last-of-type {
-  margin-bottom: 0;
 }
 
 .entry__field:focus {

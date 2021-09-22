@@ -3,11 +3,14 @@ import Entry from '../Entry/Entry';
 import { SUCCESS_REGISTER_MSG } from '../../utils/constants';
 
 export default function Register(props) {
-  const { submitHandler, errorHandler } = props;
+  const { submitHandler, checkStatus, errorHandler } = props;
 
   function register(user) {
     mainApi.register(user)
-      .then(() => submitHandler({ email: user.email, password: user.password }, SUCCESS_REGISTER_MSG))
+      .then((res) => {
+        checkStatus(res);
+        submitHandler({ email: user.email, password: user.password }, SUCCESS_REGISTER_MSG);
+      })
       .catch(errorHandler)
   }
 

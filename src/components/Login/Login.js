@@ -4,7 +4,7 @@ export default function Login(props) {
   const { submitHandler, errorHandler } = props;
 
   function login(user) {
-    submitHandler(user)
+    return submitHandler(user)
       .catch(errorHandler)
   }
 

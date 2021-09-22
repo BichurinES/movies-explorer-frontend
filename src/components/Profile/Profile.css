@@ -78,6 +78,11 @@
   color: #fff;
 }
 
+.profile__field_type_error {
+  -webkit-text-fill-color: #EE3465;
+  color: #EE3465;
+}
+
 .profile__error {
   display: none;
   padding: 10px 0;
