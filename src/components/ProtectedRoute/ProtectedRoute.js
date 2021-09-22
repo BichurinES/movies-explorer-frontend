@@ -4,7 +4,7 @@ export default function ProtectedRoute(props) {
   const { path, isLogged, children } = props;
   return (
     <Route to={ path }>
-      { isLogged && isLogged !== 'false' ? children : <Redirect to="/signin" /> }
+      { isLogged ? children : <Redirect to="/signin" /> }
     </Route>
   )
 }
