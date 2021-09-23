@@ -25,7 +25,7 @@ export const MOVIES_SECTION_SETTINGS = {
 export const BEATFILM_MOVIES_API_BASE_URL = 'https://api.nomoreparties.co/beatfilm-movies';
 export const BEATFILM_MOVIES_API_IMAGE_URL = 'https://api.nomoreparties.co';
 export const MAIN_API_SETTINGS = {
-  baseUrl: 'https://api.mestogram.nomoredomains.monster',
+  baseUrl: 'https://movielike.nomoredomains.club/api',
   headers: { 'Content-Type': 'application/json' },
 };
 
