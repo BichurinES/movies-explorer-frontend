@@ -7,7 +7,7 @@ import './Profile.css';
 export default function Profile(props) {
   let startUserData = localStorage.getItem('user');
   startUserData = startUserData ? JSON.parse(startUserData) : {};
-  const { values, handleChange, errors, isValid, resetForm } = ValidationForm();
+  const { values, handleChange, errors, isValid } = ValidationForm();
   const [isSameUserData, setIsSameUserData] = useState(true);
   const { logoutHandler, updateUser, checkStatus, errorHandler } = props;
 
