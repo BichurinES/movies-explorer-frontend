@@ -2,12 +2,12 @@ import React from 'react';
 import Header from '../Header/Header';
 import Navigation from '../Navigation/Navigation';
 
-export default function LoggedHeader() {
+export default function LoggedHeader(props) {
+  const { type } = props;
 
   return (
-    <Header>
-      <div></div>
-      <Navigation />
+    <Header type={ type }>
+      <Navigation type={ type } />
     </Header>
   )
 }

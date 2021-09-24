@@ -52,6 +52,7 @@
 
 .menu__container_type_desktop {
   display: none;
+  background-color: inherit;
 }
 
 .menu__nav {
@@ -107,6 +108,12 @@
   font-size: 14px;
   line-height: 16px;
   color: #fff;
+}
+
+.menu__profile_type_main {
+  border: 1px solid rgb(255, 255, 255, .6);
+  background-color: #073042;
+  -webkit-appearance: none; 
 }
 
 .menu__close-button {

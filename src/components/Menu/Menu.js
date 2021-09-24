@@ -4,7 +4,7 @@ import './Menu.css';
 
 export default function Menu(props) {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  const { isMobile } = props;
+  const { isMobile, type } = props;
 
   function openMenu() {
     setIsMenuOpen(true);
@@ -38,7 +38,7 @@ export default function Menu(props) {
             </li>
           </ul>
         </nav>
-        <Link to="/profile" className="menu__profile page__button">Аккаунт</Link>
+        <Link to="/profile" className={ `menu__profile ${ type === 'main' ? 'menu__profile_type_main' : '' } page__button` }>Аккаунт</Link>
         { isMobile ? <button className="menu__close-button page__button" type="button" name="close-button"  onClick={ closeMenu }></button> : '' }
       </div>
     </div>

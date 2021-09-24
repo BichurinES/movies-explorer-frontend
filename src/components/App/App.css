@@ -12,6 +12,10 @@
   transition: opacity .5s ease;
 }
 
+.page__button:hover {
+  opacity: .8;
+}
+
 .page__button_disable {
   opacity: .3;
 }

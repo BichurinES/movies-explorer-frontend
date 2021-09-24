@@ -30,6 +30,7 @@ export const MAIN_API_SETTINGS = {
 };
 
 export const SUCCESS_REGISTER_MSG = 'Регистрация прошла успешно!';
+export const SUCCESS_PROFILE_MSG = 'Данные пользователя изменены';
 export const MOVIES_NOT_FOUND_MSG = 'Ничего не найдено';
 export const SEARCH_SERVER_ERROR_MSG = 'Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз';
 export const AUTO_EMPTY_ERROR_MSG = 'Заполните это поле.';

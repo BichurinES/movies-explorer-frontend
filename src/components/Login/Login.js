@@ -3,9 +3,9 @@ import Entry from '../Entry/Entry';
 export default function Login(props) {
   const { submitHandler, errorHandler } = props;
 
-  function login(user) {
+  function login(user, cb) {
     return submitHandler(user)
-      .catch(errorHandler)
+      .catch((err) => errorHandler(err, cb))
   }
 
   return (

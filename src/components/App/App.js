@@ -6,6 +6,7 @@ import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import { SavedMoviesContext } from '../../contexts/SavedMoviesContext';
 import mainApi from '../../utils/MainApi';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
+import ProtectedEntryRoute from '../ProtectedEntryRoute/ProtectedEntryRoute';
 import MainHeader from '../MainHeader/MainHeader';
 import LoggedHeader from '../LoggedHeader/LoggedHeader';
 import Footer from '../Footer/Footer';
@@ -19,8 +20,9 @@ import NotFound from '../NotFound/NotFound';
 import InfoTooltip from '../InfoTooltip/InfoTooltip';
 
 function App() {
+  const startUserData = localStorage.getItem('user');
   const history = useHistory();
-  const [currentUser, setCurrentUser] = useState({});
+  const [currentUser, setCurrentUser] = useState(startUserData ? JSON.parse(startUserData) : {});
   const [savedMovies, setSavedMovies] = useState([]);
   const [isLogged, setIsLogged] = useState(localStorage.getItem('isLogged') === 'true');
   const [isPopupOpened, setIsPopupOpened] = useState(false);
@@ -45,10 +47,21 @@ function App() {
     setIsPopupOpened(false);
   }
 
-  function errorHandler(err) {
+  function errorHandler(err, cb) {
     openPopup({
       isSuccess: false,
       title: err.message,
+    });
+
+    if (cb) {
+      cb();
+    }
+  }
+
+  function showSuccessMsg(msg) {
+    openPopup({
+      isSuccess: true,
+      title: msg,
     });
   }
 
@@ -83,10 +96,7 @@ function App() {
   function login(data, successMsg='') {
     checkStatus(data);
     if (successMsg) {
-      openPopup({
-        isSuccess: true,
-        title: successMsg,
-      });
+      showSuccessMsg(successMsg);
     }
     
     updateCurrentUser(data);
@@ -99,7 +109,7 @@ function App() {
     checkStatus(data);
     updateCurrentUser({});
     localStorage.setItem('isLogged', false);
-    setIsLogged(localStorage.getItem('isLogged'));
+    setIsLogged(localStorage.getItem('isLogged') === 'true');
     localStorage.removeItem('savedMovies');
     localStorage.removeItem('searchedMovies');
     history.push("/");
@@ -122,14 +132,14 @@ function App() {
         .catch(errorHandler)
     }
   }, []);
-
+  
   return (
     <div className="page">
       <CurrentUserContext.Provider value={ currentUser }>
         <SavedMoviesContext.Provider value={{ savedMovies, updateSavedCards }}>
           <Switch>
             <Route exact path="/">
-              <MainHeader />
+              { isLogged ? <LoggedHeader type="main" /> : <MainHeader /> } 
               <Main />
               <Footer />
             </Route>
@@ -148,16 +158,16 @@ function App() {
 
             <ProtectedRoute path="/profile" isLogged={isLogged}>
               <LoggedHeader />
-              <Profile logoutHandler={ logoutHandler } updateUser={ updateCurrentUser } checkStatus={ checkStatus } errorHandler={ errorHandler } />
+              <Profile logoutHandler={ logoutHandler } updateUser={ updateCurrentUser } showSuccessMsg={ showSuccessMsg } checkStatus={ checkStatus } errorHandler={ errorHandler } />
             </ProtectedRoute>
 
-            <Route path="/signup">
+            <ProtectedEntryRoute path="/signup" isLogged={isLogged}>
               <Register submitHandler={ loginHandler } checkStatus={ checkStatus } errorHandler={ errorHandler } />
-            </Route>
+            </ProtectedEntryRoute>
 
-            <Route path="/signin">
+            <ProtectedEntryRoute path="/signin" >
               <Login submitHandler={ loginHandler } errorHandler={ errorHandler } />
-            </Route>
+            </ProtectedEntryRoute>
 
             <Route path="*">
               <NotFound />

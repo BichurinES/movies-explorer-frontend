@@ -1,28 +1,43 @@
-import { useState, useEffect } from 'react';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
+import { useState, useEffect, useContext } from 'react';
 import mainApi from '../../utils/MainApi';
-import { AUTO_NAME_ERROR_MSG, CORRECT_NAME_ERROR_MSG } from '../../utils/constants';
+import { SUCCESS_PROFILE_MSG, AUTO_NAME_ERROR_MSG, CORRECT_NAME_ERROR_MSG } from '../../utils/constants';
 import ValidationForm from '../ValidationForm/ValidationForm';
 import './Profile.css';
 
 export default function Profile(props) {
-  let startUserData = localStorage.getItem('user');
-  startUserData = startUserData ? JSON.parse(startUserData) : {};
+  const user = useContext(CurrentUserContext);
   const { values, handleChange, errors, isValid } = ValidationForm();
   const [isSameUserData, setIsSameUserData] = useState(true);
-  const { logoutHandler, updateUser, checkStatus, errorHandler } = props;
+  const [isReqInProgress, setIsReqInProgress] = useState(false);
+  const { logoutHandler, updateUser, showSuccessMsg, checkStatus, errorHandler } = props;
 
-  values.name = values.name === undefined ? startUserData.name : values.name;
-  values.email = values.email === undefined ? startUserData.email : values.email;
+  values.name = values.name === undefined ? user.name : values.name;
+  values.email = values.email === undefined ? user.email : values.email;
   errors.name = errors.name === AUTO_NAME_ERROR_MSG ? CORRECT_NAME_ERROR_MSG : errors.name;
+
+  function blockForm() {
+    setIsReqInProgress(true);
+  }
+
+  function unblockForm() {
+    setIsReqInProgress(false);
+  }
   
   function submitHandler(evt) {
     evt.preventDefault();
+    blockForm();
     mainApi.changeProfile(values)
       .then((res) => {
         checkStatus(res);
         updateUser(res);
+        showSuccessMsg(SUCCESS_PROFILE_MSG);
+        unblockForm();
       })
-      .catch(errorHandler)
+      .catch((err) => {
+        errorHandler(err);
+        unblockForm();
+      })
   }
 
   function logout(evt) {
@@ -33,13 +48,13 @@ export default function Profile(props) {
   }
 
   useEffect(() => {
-    setIsSameUserData(startUserData.name === values.name && startUserData.email === values.email);
-  }, [values, startUserData]);
+    setIsSameUserData(user.name === values.name && user.email === values.email);
+  }, [values, user]);
   
   return (
     <main className="profile">
       <form className="profile__form" onSubmit={ submitHandler }  autoComplete="off">
-        <h1 className="profile__title">{`Привет, ${startUserData.name}!`}</h1>
+        <h1 className="profile__title">{`Привет, ${user.name}!`}</h1>
         <fieldset className="profile__fields-container">
           <div className="profile__field-wrap">
             <label className="profile__field-name" htmlFor="name-field">Имя</label>
@@ -53,6 +68,7 @@ export default function Profile(props) {
               maxLength="30"
               noValidate
               required
+              readOnly={ isReqInProgress ? "readonly" : false }
               value={ values.name }
               onChange={ handleChange } 
             />
@@ -67,6 +83,7 @@ export default function Profile(props) {
               type="email"
               noValidate
               required
+              readOnly={ isReqInProgress ? "readonly" : false }
               value={ values.email }
               onChange={ handleChange } 
             />
@@ -74,10 +91,10 @@ export default function Profile(props) {
           <span className={ `profile__error ${ errors.email ? 'profile__error_visible' : '' }` }>{ errors.email }</span>
         </fieldset>
         <input
-          className={ `profile__edit-button page__button ${ isSameUserData || !isValid ? 'profile__edit-button_disable' : '' }` }
+          className={ `profile__edit-button page__button ${ isSameUserData || !isValid || isReqInProgress ? 'profile__edit-button_disable' : '' }` }
           type="submit"
           value="Редактировать"
-          disabled={ isSameUserData || !isValid ? true : false } 
+          disabled={ isSameUserData || !isValid || isReqInProgress ? true : false } 
         />
       </form>
       <button className="profile__logout-button page__button" onClick={ logout }>Выйти из аккаунта</button>
