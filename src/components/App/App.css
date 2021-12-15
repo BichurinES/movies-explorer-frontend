@@ -1,0 +1,29 @@
+.page {
+  background-color: #202020;
+  min-height: 100vh;
+  min-width: 320px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: 'Inter', Arial, sans-serif;
+}
+
+.page__button {
+  cursor: pointer;
+  transition: opacity .5s ease;
+}
+
+.page__button:hover {
+  opacity: .8;
+}
+
+.page__button_disable {
+  opacity: .3;
+}
+
+.page__link {
+  transition: opacity .5s ease;
+}
+
+.page__link:hover {
+  opacity: .7;
+}

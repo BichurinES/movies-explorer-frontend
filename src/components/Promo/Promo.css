@@ -1,0 +1,100 @@
+.promo {
+  background-color: #073042;
+  padding: 70px 0 30px;
+}
+
+.promo__content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+.promo__logo {
+  width: 210px;
+  height: 206px;
+}
+
+.promo__title {
+  max-width: 640px;
+  margin: 0;
+  margin-top: 44px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 30px;
+  line-height: 38px;
+  letter-spacing: -0.04em;
+  color: #fff;
+}
+
+.promo__title-faculty {
+  white-space: nowrap;
+}
+
+.promo__subtitle {
+  max-width: 260px;
+  margin: 24px auto 80px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 16px;
+  color: #fff;
+  opacity: .5;
+}
+
+@media screen and (min-width: 768px) {
+  .promo {
+    padding: 140px 0 76px;
+  }
+
+  .promo__content {
+    padding: 0 44px;
+  }
+
+  .promo__logo {
+    width: 310px;
+    height: 304px;
+  }
+
+  .promo__title {
+    margin-top: 48px;
+    font-size: 40px;
+    line-height: 50px;
+    letter-spacing: normal;
+  }
+
+  .promo__subtitle {
+    margin-top: 22px;
+    margin-bottom: 92px;
+  }
+}
+
+
+@media screen and (min-width: 1024px) {
+  .promo {
+    padding: 75px 0;
+  }
+
+  .promo__content {
+    flex-direction: row-reverse;
+    align-items: flex-start;
+    padding: 0 70px;
+    text-align: left;
+  }
+
+  .promo__title {
+    margin-top: 0;
+    font-size: 50px;
+    line-height: 58px;
+  }
+
+  .promo__subtitle {
+    max-width: 310px;
+    margin: 36px 0 146px;
+  }
+}

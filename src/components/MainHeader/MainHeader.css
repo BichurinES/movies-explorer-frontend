@@ -1,0 +1,34 @@
+.header__sign-button {
+  text-decoration: none;
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 10px;
+  line-height: 16px;
+}
+
+.header__sign-button_type_up {
+  margin-right: 14px;
+  color: #fff;
+}
+
+.header__sign-button_type_in {
+  padding: 5px 12px;
+  background: #3ddc84;
+  border-radius: 3px;
+  color: #000;
+}
+
+@media screen and (min-width: 768px) {
+  .header__sign-button {
+    font-size: 12px;
+  }
+
+  .header__sign-button_type_up {
+    margin-right: 30px;
+  }
+
+  .header__sign-button_type_in {
+    padding: 8px 20px;
+  }
+}
